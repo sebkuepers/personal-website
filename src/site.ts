@@ -37,7 +37,7 @@ export const NAV_LINKS: NavLink[] = [
 // Outbound links — fill in real URLs as they become available.
 export const SOCIAL = {
   linkedin: '#',
-  leadingMinds: '#',
+  leadingMinds: 'https://leading-minds.com/experte/sebastian-kuepers/',
   commonIntelligence: '#',
 };
 
