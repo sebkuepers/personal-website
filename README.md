@@ -2,7 +2,8 @@
 
 The personal brand & reputation site for **sebastian-kuepers.com** (English) and
 **sebastian-kuepers.de** (German, planned). A calm, editorial, type-led site built
-from the Claude Design hand-off in [`design_handoff_personal_site/`](./design_handoff_personal_site).
+from a Claude Design hand-off (design tokens, type system, layout, and copy lifted
+verbatim and reimplemented idiomatically).
 
 Built with **[Astro](https://astro.build)** (static output) + **MDX** for the essay/venture
 content pipeline, and deployed to **Cloudflare Pages**. No client framework — interactivity
