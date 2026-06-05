@@ -9,6 +9,14 @@
   "name": "personal-website",
   "main": "worker/index.js",
   "compatibility_date": "2024-11-01",
+  // Non-secret runtime vars live here so they survive every CI deploy.
+  // (Dashboard plain-text vars get wiped by `wrangler deploy`; secrets persist.)
+  // The MailerLite group new subscribers join — drives the welcome automation.
+  "vars": {
+    "MAILERLITE_GROUP_ID": "189440171093001807"
+  },
+  // NOTE: MAILERLITE_API_KEY is a SECRET — add it in the dashboard
+  // (Settings → Variables and Secrets → Add → type "Secret"). Never commit it.
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",
