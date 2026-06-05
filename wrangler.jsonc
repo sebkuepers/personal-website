@@ -1,0 +1,13 @@
+{
+  // Cloudflare Workers — static assets only (no server-side Worker code).
+  // Astro builds a fully static site into ./dist; this Worker just serves it.
+  // Used by the "Deploy command: npx wrangler deploy" step in Workers Builds.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "personal-website",
+  "compatibility_date": "2024-11-01",
+  "assets": {
+    "directory": "./dist",
+    // Serve dist/404.html for unmatched paths (Astro emits it).
+    "not_found_handling": "404-page"
+  }
+}
