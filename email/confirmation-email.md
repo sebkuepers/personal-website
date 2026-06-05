@@ -49,11 +49,35 @@ Confirm subscription
 | Background (if editable) | `#f5f3ec` |
 | Body text (if editable) | `#1c1b16` |
 
-## After confirmation
+## After-click pages (MailerLite → Subscribe settings / pages)
 
-- **Confirmation/“thank you” page:** MailerLite → Unsubscribe/confirmation page settings —
-  use the same accent `#2a5446` and a short line like
-  *“You're confirmed. Welcome to The Drift Letter.”*
-- **Welcome email:** sent separately via an automation — see `welcome.html` and the README.
+These are the hosted MailerLite pages a subscriber sees after clicking links. Use accent
+`#2a5446` for headings/buttons and keep the calm, sentence-case voice.
+
+### Confirmation success page (after clicking “Confirm subscription”)
+**Heading:**
+```
+You're confirmed. Welcome aboard.
+```
+**Body:**
+```
+Thank you — you're on the list for The Drift Letter. A welcome note is on its way with
+where to start. In the meantime, you can always read at sebastian-kuepers.com.
+```
+**Button label / link:** `Read the writing` → `https://sebastian-kuepers.com/writing`
+
+### Unsubscribe page
+**Heading:**
+```
+You're unsubscribed.
+```
+**Body:**
+```
+Done — you won't hear from The Drift Letter again. No hard feelings; the door stays open
+if you'd like to come back later.
+```
+
+### Welcome email
+Sent separately via an automation — see `welcome.html` and the README.
 
 Source: MailerLite [double opt-in](https://www.mailerlite.com/help/how-to-use-double-opt-in-when-collecting-subscribers).
