@@ -1,0 +1,78 @@
+---
+import '@/styles/global.css';
+import '@/styles/components.css';
+import Nav from '@/components/Nav.astro';
+import Footer from '@/components/Footer.astro';
+import Icon from '@/components/Icon.astro';
+import { SITE } from '@/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Path-relative or absolute OG image. Defaults to the portrait. */
+  ogImage?: string;
+  ogType?: 'website' | 'article';
+}
+
+const {
+  title,
+  description = SITE.description,
+  ogImage = '/images/sebastian-portrait.jpg',
+  ogType = 'website',
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — Architect of the agentic economy`;
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const ogImageUrl = new URL(ogImage, SITE.url).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Fonts: Newsreader (display + reading serif) · Hanken Grotesk (UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
+    />
+  </head>
+  <body>
+    <Nav />
+
+    <!-- German content is a future task; the DE language toggle reveals this. -->
+    <div class="lang-note" data-lang-note hidden>
+      <div class="wrap-wide lang-note-inner">
+        <Icon name="globe" size={15} />
+        <span>Die deutsche Fassung folgt in Kürze. Diese Seite ist vorerst auf Englisch.</span>
+        <button type="button" aria-label="Dismiss" data-lang-dismiss>
+          <Icon name="close" size={15} />
+        </button>
+      </div>
+    </div>
+
+    <slot />
+
+    <Footer />
+  </body>
+</html>

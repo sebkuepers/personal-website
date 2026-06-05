@@ -1,0 +1,74 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import { getCollection } from 'astro:content';
+import '@/styles/home.css';
+import '@/styles/article.css';
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+const essays = (await getCollection('essays')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const flagship = essays.find((e) => e.data.featured) ?? essays[0];
+const rest = essays.filter((e) => e.id !== flagship?.id);
+
+const essayHref = (e: (typeof essays)[number]) =>
+  e.data.status === 'published' ? `/writing/${e.id}` : '/writing';
+---
+<BaseLayout
+  title="Writing"
+  description="Essays and field notes on the agentic economy, AI sovereignty, and Slow Intelligence."
+>
+  <main class="article">
+    <div class="wrap art-wrap">
+      <a class="art-back link-u" href="/">
+        <Icon name="arrowRight" size={15} cls="back-arrow" />Home
+      </a>
+    </div>
+
+    <header class="wrap art-head">
+      <p class="eyebrow accent art-kicker">Writing</p>
+      <h1 class="display art-title">The heartbeat of the work.</h1>
+      <p class="lead art-deck">
+        Essays and field notes on the agentic economy, AI sovereignty, and the discipline of
+        Slow Intelligence.
+      </p>
+    </header>
+
+    <section class="section">
+      <div class="wrap">
+        {flagship && (
+          <a class="flagship" href={essayHref(flagship)}>
+            <div class="ph flagship-img" role="img" aria-label={`${flagship.data.title} cover`}>
+              <span class="ph-tag"><Icon name="waves" size={13} />{flagship.data.coverPlaceholder}</span>
+            </div>
+            <div class="flagship-body">
+              <p class="meta flagship-kicker">
+                <span class="dot" /> {flagship.data.kicker} · {flagship.data.readTime} · {fmtDate(flagship.data.date)}
+              </p>
+              <h3 class="display flagship-title">{flagship.data.title}</h3>
+              <p class="lead flagship-deck">{flagship.data.deck}</p>
+              <span class="link-u">Read the manifesto<Icon name="arrowRight" size={15} cls="arrow" /></span>
+            </div>
+          </a>
+        )}
+
+        <div class="article-grid">
+          {rest.map((a) => (
+            <a class="article-card" href={essayHref(a)}>
+              <p class="meta article-kicker">{a.data.kicker} · {a.data.readTime}</p>
+              <h4 class="serif article-title">{a.data.title}</h4>
+              <p class="article-deck">{a.data.deck}</p>
+              <span class="article-date meta">{fmtDate(a.data.date)}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Newsletter variant="band" />
+  </main>
+</BaseLayout>

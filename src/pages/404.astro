@@ -1,0 +1,25 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import '@/styles/article.css';
+---
+<BaseLayout title="Page not found" description="The page you were looking for has drifted off course.">
+  <main class="article">
+    <header class="wrap art-head">
+      <p class="eyebrow accent art-kicker">404</p>
+      <h1 class="display art-title">Off course.</h1>
+      <p class="lead art-deck">
+        The page you were looking for has drifted somewhere it cannot be found. Let us get you
+        back to steadier water.
+      </p>
+      <div class="hero-ctas" style="margin-top: 2rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+        <a class="btn btn-primary" href="/">
+          Back home<Icon name="arrowRight" size={15} cls="arrow" />
+        </a>
+        <a class="btn btn-ghost" href="/writing">
+          Read the writing<Icon name="arrowUpRight" size={15} />
+        </a>
+      </div>
+    </header>
+  </main>
+</BaseLayout>

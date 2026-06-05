@@ -1,0 +1,110 @@
+---
+import Wordmark from './Wordmark.astro';
+import Icon from './Icon.astro';
+import { NAV_LINKS, SITE } from '@/site';
+
+// Derive a coarse "active section" from the current route so standalone pages
+// (writing / ventures) keep the matching nav item underlined. On the home page
+// a small scroll-spy script takes over and updates this live.
+const path = Astro.url.pathname;
+let activeId = '';
+if (path.startsWith('/writing')) activeId = 'writing';
+else if (path.startsWith('/ventures')) activeId = 'ventures';
+---
+<header class="nav" data-nav-root>
+  <div class="nav-inner wrap-wide">
+    <Wordmark />
+    <nav class="nav-links" aria-label="Primary">
+      {NAV_LINKS.map((l) => (
+        <a
+          class:list={['nav-link', { 'is-active': l.id === activeId }]}
+          data-nav={l.id}
+          href={l.href}
+        >{l.label}</a>
+      ))}
+    </nav>
+    <div class="nav-end">
+      <div class="lang" role="group" aria-label="Language" data-lang>
+        <button type="button" class="on" data-lang-set="EN">EN</button>
+        <span aria-hidden="true">/</span>
+        <button type="button" data-lang-set="DE">DE</button>
+      </div>
+      <a class="btn btn-primary nav-cta" href={SITE.contactAnchor}>
+        Work with me<Icon name="arrowRight" size={15} cls="arrow" />
+      </a>
+      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false" data-burger>
+        <Icon name="menu" size={22} cls="burger-open" />
+        <Icon name="close" size={22} cls="burger-close" />
+      </button>
+    </div>
+  </div>
+  <div class="nav-sheet" data-sheet hidden>
+    {NAV_LINKS.map((l) => (
+      <a class="nav-sheet-link" href={l.href} data-sheet-link>{l.label}</a>
+    ))}
+    <a class="btn btn-primary" style="margin-top:0.5rem" href={SITE.contactAnchor} data-sheet-link>
+      Work with me<Icon name="arrowRight" size={15} cls="arrow" />
+    </a>
+  </div>
+</header>
+
+<script>
+  // ── Sticky nav: gain background/blur/border past 24px scroll ──────────────
+  const nav = document.querySelector<HTMLElement>('[data-nav-root]');
+  const onScroll = () => nav?.classList.toggle('is-scrolled', window.scrollY > 24);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // ── Mobile sheet toggle ───────────────────────────────────────────────────
+  const burger = document.querySelector<HTMLButtonElement>('[data-burger]');
+  const sheet = document.querySelector<HTMLElement>('[data-sheet]');
+  const setSheet = (open: boolean) => {
+    if (!sheet || !burger) return;
+    sheet.hidden = !open;
+    // CSS swaps the menu/close glyph off the aria-expanded state.
+    burger.setAttribute('aria-expanded', String(open));
+  };
+  burger?.addEventListener('click', () => setSheet(sheet?.hidden ?? true));
+  document.querySelectorAll('[data-sheet-link]').forEach((el) =>
+    el.addEventListener('click', () => setSheet(false)),
+  );
+
+  // ── Language toggle → dismissible "German is coming" banner ───────────────
+  const langButtons = document.querySelectorAll<HTMLButtonElement>('[data-lang-set]');
+  const note = document.querySelector<HTMLElement>('[data-lang-note]');
+  const setLang = (lang: string) => {
+    langButtons.forEach((b) => b.classList.toggle('on', b.dataset.langSet === lang));
+    if (note) note.hidden = lang !== 'DE';
+  };
+  langButtons.forEach((b) => b.addEventListener('click', () => setLang(b.dataset.langSet ?? 'EN')));
+  document
+    .querySelector('[data-lang-dismiss]')
+    ?.addEventListener('click', () => setLang('EN'));
+
+  // ── Scroll-spy: underline the nav item for the section in view (home) ─────
+  const spyMap: Record<string, string> = {
+    thesis: 'about',
+    writing: 'writing',
+    ventures: 'ventures',
+    speaking: 'speaking',
+  };
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link[data-nav]');
+  const sections = Object.keys(spyMap)
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el !== null);
+
+  if (sections.length && navLinks.length) {
+    const setActive = (navId: string | null) =>
+      navLinks.forEach((l) => l.classList.toggle('is-active', l.dataset.nav === navId));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible) setActive(spyMap[visible.target.id] ?? null);
+      },
+      { rootMargin: '-45% 0px -45% 0px', threshold: [0, 0.25, 0.5, 1] },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

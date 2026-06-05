@@ -1,0 +1,87 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import { SITE } from '@/site';
+import '@/styles/article.css';
+
+export async function getStaticPaths() {
+  const essays = await getCollection('essays', (e) => e.data.status === 'published');
+  return essays.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+const fmtDate = (date: Date) =>
+  date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+// Resolve the optional "next venture" foot link.
+const nextVenture = d.nextVenture ? await getEntry('ventures', d.nextVenture) : undefined;
+const nextVentureLabel = nextVenture?.data.detailTitle ?? nextVenture?.data.name;
+---
+<BaseLayout
+  title={d.title}
+  description={d.deck}
+  ogType="article"
+>
+  <main class="article">
+    <div class="wrap art-wrap">
+      <a class="art-back link-u" href="/writing">
+        <Icon name="arrowRight" size={15} cls="back-arrow" />Writing
+      </a>
+    </div>
+
+    <header class="wrap art-head">
+      <p class="eyebrow accent art-kicker">{d.pageKicker ?? d.kicker}</p>
+      <h1 class="display art-title">{d.title}</h1>
+      <p class="lead art-deck">{d.pageDeck ?? d.deck}</p>
+
+      <div class="art-byline">
+        <div class="art-author">
+          <img class="art-avatar" src="/images/sebastian-portrait.jpg" alt={SITE.name} width="46" height="46" />
+          <div>
+            <span class="art-author-name serif">{SITE.name}</span>
+            <span class="meta art-author-role">{d.authorRole}</span>
+          </div>
+        </div>
+        <div class="art-meta-facts">
+          <span class="meta">{fmtDate(d.date)}</span>
+          <span class="meta art-dot">·</span>
+          <span class="meta">{d.readTime} read</span>
+        </div>
+      </div>
+    </header>
+
+    <figure class="art-cover-wrap wrap-wide">
+      <div class="ph art-cover" role="img" aria-label="Cover image">
+        <span class="ph-tag"><Icon name="waves" size={13} />{d.coverPlaceholder}</span>
+      </div>
+      {d.coverCaption && <figcaption class="meta art-cap">{d.coverCaption}</figcaption>}
+    </figure>
+
+    <article class="wrap art-body">
+      <Content />
+    </article>
+
+    <div class="wrap art-foot">
+      {d.tags.length > 0 && (
+        <div class="art-foot-row">
+          <span class="meta">Filed under</span>
+          <div class="art-tags">
+            {d.tags.map((t) => <span class="art-tag">{t}</span>)}
+          </div>
+        </div>
+      )}
+      {nextVenture && (
+        <a class="link-u" href={`/ventures/${nextVenture.id}`}>
+          Next: the venture this thinking built — {nextVentureLabel}<Icon name="arrowRight" size={15} cls="arrow" />
+        </a>
+      )}
+    </div>
+
+    <Newsletter variant="band" />
+  </main>
+</BaseLayout>

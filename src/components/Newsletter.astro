@@ -1,0 +1,73 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  variant?: 'band';
+}
+const { variant = 'band' } = Astro.props;
+---
+<section class={`news news-${variant}`} aria-labelledby="news-h" data-newsletter>
+  <div class="wrap news-grid">
+    <div class="news-copy">
+      <p class="eyebrow accent">The Drift Letter</p>
+      <h2 id="news-h" class="display news-title">Notes on building AI that keeps people in command.</h2>
+      <p class="news-sub">
+        An occasional letter — new essays, what I am learning across the ventures, and the
+        thinking behind <em>Slow Intelligence</em>. No cadence promises, no noise.
+      </p>
+    </div>
+    <div class="news-form-wrap">
+      <div class="news-done" data-news-done hidden>
+        <Icon name="feather" size={20} />
+        <div>
+          <strong>You are on the list.</strong>
+          <span>A short confirmation is on its way to <span data-news-email>your inbox</span>.</span>
+        </div>
+      </div>
+      <form class="news-form" data-news-form>
+        <label class="meta" for="news-email">Email address</label>
+        <div class="news-row">
+          <input
+            id="news-email"
+            name="email"
+            type="email"
+            required
+            placeholder="you@company.com"
+            autocomplete="email"
+          />
+          <button class="btn btn-primary" type="submit">
+            Subscribe<Icon name="arrowRight" size={15} cls="arrow" />
+          </button>
+        </div>
+        <p class="meta news-fine">A few times a year. Unsubscribe in one click.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Newsletter signup. No mailing-list provider is wired yet (launch decision):
+  // submit is intercepted and the confirmation state is shown client-side.
+  //
+  // TO WIRE A PROVIDER (Buttondown / MailerLite / Beehiiv, etc.):
+  //   replace the `// provider integration point` block below with a fetch() to
+  //   the provider's subscribe endpoint (or post the form to its action URL),
+  //   and only reveal the confirmation on a successful response.
+  document.querySelectorAll<HTMLElement>('[data-newsletter]').forEach((root) => {
+    const form = root.querySelector<HTMLFormElement>('[data-news-form]');
+    const done = root.querySelector<HTMLElement>('[data-news-done]');
+    const emailOut = root.querySelector<HTMLElement>('[data-news-email]');
+    const input = root.querySelector<HTMLInputElement>('input[type="email"]');
+
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = input?.value.trim();
+      if (!email) return;
+
+      // provider integration point — currently a no-op confirmation.
+      if (emailOut) emailOut.textContent = email;
+      form.hidden = true;
+      if (done) done.hidden = false;
+    });
+  });
+</script>

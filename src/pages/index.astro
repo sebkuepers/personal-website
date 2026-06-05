@@ -1,0 +1,235 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import { getCollection } from 'astro:content';
+import { HERO, CURRENTLY, PRINCIPLES, SPEAKING, THREADS } from '@/data/home';
+import { SITE, SOCIAL } from '@/site';
+import '@/styles/home.css';
+
+const fmtDate = (d: Date) =>
+  d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+const essays = (await getCollection('essays')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const flagship = essays.find((e) => e.data.featured) ?? essays[0];
+const restEssays = essays.filter((e) => e.id !== flagship?.id);
+
+const ventures = (await getCollection('ventures')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const essayHref = (e: (typeof essays)[number]) =>
+  e.data.status === 'published' ? `/writing/${e.id}` : '/writing';
+---
+<BaseLayout>
+  <main class="home">
+    {/* ── Hero (split) ─────────────────────────────────────────────── */}
+    <section class="hero hero-split wrap-wide">
+      <div class="hero-col">
+        <p class="eyebrow accent reveal">{HERO.eyebrow}</p>
+        <h1 class="display hero-head reveal d1">
+          I build AI that <em>widens</em> human agency<br class="hide-sm" /> — not the kind that quietly trades it&nbsp;away.
+        </h1>
+        <p class="lead hero-lead reveal d2">{HERO.lead}</p>
+        <div class="reveal d3">
+          <div class="hero-ctas">
+            <a class="btn btn-primary" href={SITE.contactAnchor}>
+              Work with me<Icon name="arrowRight" size={15} cls="arrow" />
+            </a>
+            <a class="btn btn-ghost" href="/#writing">
+              Read my thinking<Icon name="arrowUpRight" size={15} />
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-aside reveal d2">
+        <figure class="hero-portrait img-frame" aria-label={SITE.name}>
+          <img src="/images/sebastian-portrait.jpg" alt={SITE.name} width="800" height="1066" />
+        </figure>
+      </div>
+    </section>
+
+    {/* ── Credibility strip ────────────────────────────────────────── */}
+    <section class="cred" aria-label="Current roles">
+      <div class="wrap-wide cred-inner">
+        <span class="eyebrow cred-label">Currently</span>
+        <ul class="cred-list">
+          {CURRENTLY.map((c, i) => (
+            <li>
+              <span class="cred-item">{c}</span>
+              {i < CURRENTLY.length - 1 && <span class="cred-sep" aria-hidden="true">·</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <hr class="rule wrap-rule" />
+
+    {/* ── Thesis ───────────────────────────────────────────────────── */}
+    <section class="section thesis" id="thesis">
+      <div class="wrap">
+        <p class="eyebrow accent reveal">The throughline</p>
+        <h2 class="display thesis-statement reveal d1">
+          One idea runs under everything I build: technology should widen human agency,
+          not quietly trade it away for convenience.
+        </h2>
+        <div class="thesis-grid">
+          {PRINCIPLES.map((p, i) => (
+            <article class={`principle reveal d${i + 1}`}>
+              <span class="principle-ico"><Icon name={p.icon} size={22} /></span>
+              <h3 class="principle-k">{p.k}</h3>
+              <p class="principle-t serif">{p.t}</p>
+              <p class="principle-d">{p.d}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ── Writing ──────────────────────────────────────────────────── */}
+    <section class="section writing" id="writing">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <div>
+            <p class="eyebrow accent">Writing</p>
+            <h2 class="display sec-title">The heartbeat of the work.</h2>
+          </div>
+          <a class="link-u" href="/writing">
+            All essays<Icon name="arrowRight" size={15} cls="arrow" />
+          </a>
+        </header>
+
+        {flagship && (
+          <a class="flagship reveal d1" href={essayHref(flagship)}>
+            <div class="ph flagship-img" role="img" aria-label={`${flagship.data.title} cover`}>
+              <span class="ph-tag"><Icon name="waves" size={13} />{flagship.data.coverPlaceholder}</span>
+            </div>
+            <div class="flagship-body">
+              <p class="meta flagship-kicker">
+                <span class="dot" /> {flagship.data.kicker} · {flagship.data.readTime} · {fmtDate(flagship.data.date)}
+              </p>
+              <h3 class="display flagship-title">{flagship.data.title}</h3>
+              <p class="lead flagship-deck">{flagship.data.deck}</p>
+              <span class="link-u">Read the manifesto<Icon name="arrowRight" size={15} cls="arrow" /></span>
+            </div>
+          </a>
+        )}
+
+        <div class="article-grid">
+          {restEssays.map((a, i) => (
+            <a class={`article-card reveal d${i + 1}`} href={essayHref(a)}>
+              <p class="meta article-kicker">{a.data.kicker} · {a.data.readTime}</p>
+              <h4 class="serif article-title">{a.data.title}</h4>
+              <p class="article-deck">{a.data.deck}</p>
+              <span class="article-date meta">{fmtDate(a.data.date)}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ── Ventures ─────────────────────────────────────────────────── */}
+    <section class="section ventures" id="ventures">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <div>
+            <p class="eyebrow accent">Ventures &amp; projects</p>
+            <h2 class="display sec-title">A coherent body of work.</h2>
+          </div>
+          <p class="sec-note">Different surfaces, one philosophy. Each tied back to sovereignty, trust, or intentionality.</p>
+        </header>
+        <div class="venture-list">
+          {ventures.map((v, i) => (
+            <article class={`venture reveal d${(i % 3) + 1}`}>
+              <div class="venture-idx meta tnum">{String(i + 1).padStart(2, '0')}</div>
+              <div class="venture-main">
+                <div class="venture-headrow">
+                  <h3 class="serif venture-name">
+                    {v.data.name}{v.data.sub && <span class="venture-sub"> {v.data.sub}</span>}
+                    {v.data.heart && (
+                      <span class="venture-heart" title="The ethical heart of the portfolio">
+                        <Icon name="star" size={14} />
+                      </span>
+                    )}
+                  </h3>
+                  <span class="venture-thesis-tag">{v.data.thesis}</span>
+                </div>
+                <p class="venture-blurb">{v.data.blurb}</p>
+                <div class="venture-foot">
+                  <span class="meta">{v.data.role} · {v.data.years}</span>
+                  {v.data.status === 'published' ? (
+                    <a class="link-u" href={`/ventures/${v.id}`}>
+                      Read the story<Icon name="arrowRight" size={15} cls="arrow" />
+                    </a>
+                  ) : (
+                    <span class="meta venture-soon">Detail coming</span>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    {/* ── Speaking ─────────────────────────────────────────────────── */}
+    <section class="section speaking" id="speaking">
+      <div class="wrap speaking-grid">
+        <div class="speaking-copy reveal">
+          <p class="eyebrow accent">Speaking</p>
+          <h2 class="display sec-title">Bring the agentic economy into the room — without the hype.</h2>
+          <p class="speaking-lead read">{SPEAKING.lead}</p>
+          <ul class="topics">
+            {SPEAKING.topics.map((t) => (
+              <li><Icon name="mic" size={16} /><span>{t}</span></li>
+            ))}
+          </ul>
+          <div class="speaking-cta">
+            <a class="btn btn-primary" href={SOCIAL.leadingMinds} target="_blank" rel="noopener noreferrer">
+              Book me to speak<Icon name="arrowUpRight" size={15} />
+            </a>
+            <span class="meta">Speaking is booked through <strong>Leading Minds</strong>.</span>
+          </div>
+        </div>
+        <div class="speaking-aside reveal d1">
+          <div class="ph speaking-reel" role="img" aria-label="Talk sizzle reel">
+            <span class="ph-tag"><Icon name="mic" size={13} />Sizzle reel — supply later</span>
+            <span class="reel-play" aria-hidden="true"><Icon name="arrowRight" size={22} /></span>
+          </div>
+          <dl class="speaking-stats">
+            {SPEAKING.stats.map((s) => (
+              <div><dt class="meta">{s.label}</dt><dd class="serif">{s.value}</dd></div>
+            ))}
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    {/* ── Beyond the work (balanced) ───────────────────────────────── */}
+    <section class="section beyond" id="beyond">
+      <div class="wrap">
+        <header class="sec-head reveal">
+          <div>
+            <p class="eyebrow accent">Beyond the work</p>
+            <h2 class="display sec-title">The same philosophy, off duty.</h2>
+          </div>
+          <p class="sec-note">A person, not a headline. The slowness is the point.</p>
+        </header>
+        <div class="threads">
+          {THREADS.map((t, i) => (
+            <article class={`thread reveal d${i + 1}`}>
+              <span class="thread-ico"><Icon name={t.icon} size={20} /></span>
+              <h3 class="serif thread-k">{t.k}</h3>
+              <p class="thread-d">{t.d}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <Newsletter variant="band" />
+  </main>
+</BaseLayout>

@@ -1,0 +1,84 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Icon from '@/components/Icon.astro';
+import Newsletter from '@/components/Newsletter.astro';
+import { getCollection, getEntry, render } from 'astro:content';
+import '@/styles/venture.css';
+import '@/styles/article.css'; // shared pull-quote (.art-quote) styles
+
+export async function getStaticPaths() {
+  const ventures = await getCollection('ventures', (v) => v.data.status === 'published');
+  return ventures.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const d = entry.data;
+
+const relatedEssay = d.relatedEssay ? await getEntry('essays', d.relatedEssay) : undefined;
+---
+<BaseLayout
+  title={d.detailTitle ?? d.name}
+  description={d.deck ?? d.blurb}
+  ogType="article"
+>
+  <main class="venture-page">
+    <div class="wrap art-wrap">
+      <a class="art-back link-u" href="/#ventures">
+        <Icon name="arrowRight" size={15} cls="back-arrow" />Ventures
+      </a>
+    </div>
+
+    <header class="wrap vp-head">
+      <div class="vp-head-top">
+        {d.eyebrow && <p class="eyebrow accent">{d.eyebrow}</p>}
+        <span class="venture-thesis-tag">{d.thesis}</span>
+      </div>
+      <h1 class="display vp-title">{d.detailTitle ?? d.name}</h1>
+      {d.deck && <p class="lead vp-deck">{d.deck}</p>}
+    </header>
+
+    <figure class="vp-cover-wrap wrap-wide">
+      <div class="ph vp-cover" role="img" aria-label={`${d.detailTitle ?? d.name} in context`}>
+        <span class="ph-tag"><Icon name="globe" size={13} />{d.coverPlaceholder}</span>
+      </div>
+    </figure>
+
+    {d.facts.length > 0 && (
+      <section class="wrap vp-facts-wrap">
+        <dl class="vp-facts">
+          {d.facts.map((f) => (
+            <div class="vp-fact">
+              <dt class="meta">{f.k}</dt>
+              <dd class="serif">{f.v}</dd>
+            </div>
+          ))}
+        </dl>
+      </section>
+    )}
+
+    <article class="wrap vp-body">
+      <Content />
+    </article>
+
+    {(d.throughline || relatedEssay) && (
+      <div class="wrap vp-foot">
+        <div class="vp-foot-card">
+          {d.throughline && (
+            <div>
+              <p class="eyebrow accent">The throughline</p>
+              <p class="serif vp-foot-line">{d.throughline}</p>
+            </div>
+          )}
+          {relatedEssay && (
+            <a class="link-u" href={`/writing/${relatedEssay.id}`}>
+              Read the thinking behind it<Icon name="arrowRight" size={15} cls="arrow" />
+            </a>
+          )}
+        </div>
+      </div>
+    )}
+
+    <Newsletter variant="band" />
+  </main>
+</BaseLayout>

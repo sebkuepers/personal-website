@@ -1,0 +1,36 @@
+---
+import Wordmark from './Wordmark.astro';
+import { SITE, FOOTER_COLUMNS } from '@/site';
+
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="wrap-wide footer-inner">
+    <div class="footer-brand">
+      <Wordmark small />
+      <p class="footer-thesis read">{SITE.thesis}</p>
+    </div>
+    <div class="footer-cols">
+      {FOOTER_COLUMNS.map((col) => (
+        <div class="footer-col">
+          <p class="eyebrow">{col.heading}</p>
+          <ul>
+            {col.links.map((l) => (
+              <li>
+                <a
+                  class="footer-link"
+                  href={l.href}
+                  {...(l.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                >{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </div>
+  <div class="wrap-wide footer-base">
+    <span class="meta">© {year} {SITE.name}</span>
+    <span class="meta footer-place">{SITE.place}</span>
+  </div>
+</footer>
