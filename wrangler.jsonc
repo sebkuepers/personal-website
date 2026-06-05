@@ -1,12 +1,17 @@
 {
-  // Cloudflare Workers — static assets only (no server-side Worker code).
-  // Astro builds a fully static site into ./dist; this Worker just serves it.
-  // Used by the "Deploy command: npx wrangler deploy" step in Workers Builds.
+  // Cloudflare Worker: serves the static Astro site (ASSETS binding) and one
+  // server route — POST /api/subscribe — which forwards an email to MailerLite
+  // using a server-side token (see worker/index.js).
+  //
+  // Static assets are served first (so _headers / _redirects / 404 still apply);
+  // the Worker only runs for paths that don't match a file (i.e. /api/*).
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "personal-website",
+  "main": "worker/index.js",
   "compatibility_date": "2024-11-01",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     // Serve dist/404.html for unmatched paths (Astro emits it).
     "not_found_handling": "404-page"
   }

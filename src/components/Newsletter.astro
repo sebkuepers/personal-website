@@ -21,10 +21,10 @@ const { variant = 'band' } = Astro.props;
         <Icon name="feather" size={20} />
         <div>
           <strong>You are on the list.</strong>
-          <span>A short confirmation is on its way to <span data-news-email>your inbox</span>.</span>
+          <span>Look out for a confirmation in your inbox — <span data-news-email>your email</span>.</span>
         </div>
       </div>
-      <form class="news-form" data-news-form>
+      <form class="news-form" data-news-form novalidate>
         <label class="meta" for="news-email">Email address</label>
         <div class="news-row">
           <input
@@ -35,10 +35,15 @@ const { variant = 'band' } = Astro.props;
             placeholder="you@company.com"
             autocomplete="email"
           />
-          <button class="btn btn-primary" type="submit">
+          <button class="btn btn-primary" type="submit" data-news-submit>
             Subscribe<Icon name="arrowRight" size={15} cls="arrow" />
           </button>
         </div>
+        {/* Honeypot — hidden from people, tempting to bots. Real users leave it empty. */}
+        <div class="news-hp" aria-hidden="true">
+          <label>Company<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
+        </div>
+        <p class="meta news-error" data-news-error hidden></p>
         <p class="meta news-fine">A few times a year. Unsubscribe in one click.</p>
       </form>
     </div>
@@ -46,28 +51,61 @@ const { variant = 'band' } = Astro.props;
 </section>
 
 <script>
-  // Newsletter signup. No mailing-list provider is wired yet (launch decision):
-  // submit is intercepted and the confirmation state is shown client-side.
-  //
-  // TO WIRE A PROVIDER (Buttondown / MailerLite / Beehiiv, etc.):
-  //   replace the `// provider integration point` block below with a fetch() to
-  //   the provider's subscribe endpoint (or post the form to its action URL),
-  //   and only reveal the confirmation on a successful response.
+  // Newsletter signup → posts to the Worker's /api/subscribe route, which forwards
+  // the email to MailerLite server-side (token stays on the server). See
+  // worker/index.js. Locally (`astro dev`) the /api route doesn't exist, so submit
+  // will report an error — test against the deployed site or `wrangler dev`.
   document.querySelectorAll<HTMLElement>('[data-newsletter]').forEach((root) => {
     const form = root.querySelector<HTMLFormElement>('[data-news-form]');
     const done = root.querySelector<HTMLElement>('[data-news-done]');
     const emailOut = root.querySelector<HTMLElement>('[data-news-email]');
+    const errEl = root.querySelector<HTMLElement>('[data-news-error]');
     const input = root.querySelector<HTMLInputElement>('input[type="email"]');
+    const hp = root.querySelector<HTMLInputElement>('input[name="company"]');
+    const btn = root.querySelector<HTMLButtonElement>('[data-news-submit]');
 
-    form?.addEventListener('submit', (e) => {
+    const showError = (msg: string) => {
+      if (errEl) {
+        errEl.textContent = msg;
+        errEl.hidden = false;
+      }
+      if (btn) btn.disabled = false;
+    };
+
+    form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = input?.value.trim();
-      if (!email) return;
+      const email = input?.value.trim() ?? '';
+      if (errEl) errEl.hidden = true;
 
-      // provider integration point — currently a no-op confirmation.
-      if (emailOut) emailOut.textContent = email;
-      form.hidden = true;
-      if (done) done.hidden = false;
+      if (!email || !input?.checkValidity()) {
+        showError('Please enter a valid email address.');
+        return;
+      }
+      if (btn) btn.disabled = true;
+
+      try {
+        const res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, company: hp?.value ?? '' }),
+        });
+        const data = await res.json().catch(() => ({ ok: false }));
+
+        if (res.ok && data.ok) {
+          if (emailOut) emailOut.textContent = email;
+          if (form) form.hidden = true;
+          if (done) done.hidden = false;
+          return;
+        }
+
+        showError(
+          data.error === 'invalid-email'
+            ? 'That email doesn’t look right — please check it.'
+            : 'Something went wrong. Please try again in a moment.',
+        );
+      } catch {
+        showError('Network error — please try again.');
+      }
     });
   });
 </script>

@@ -101,6 +101,12 @@
 .news-band .news-row .btn-primary:hover { background: color-mix(in srgb, var(--on-accent) 88%, var(--accent)); }
 .news-fine { margin-top: 0.7rem; }
 .news-band .news-fine { color: color-mix(in srgb, var(--on-accent) 60%, transparent); }
+/* Honeypot — off-screen, not display:none (bots skip hidden fields). */
+.news-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.news-error { margin-top: 0.7rem; font-weight: 600; }
+.news-error[hidden] { display: none; }
+.news-band .news-error { color: var(--on-accent); }
+.news-band .news-row .btn-primary:disabled { opacity: 0.65; cursor: default; }
 .news-done { display: flex; gap: 0.9rem; align-items: flex-start; padding: 1.2rem 0; }
 .news-done[hidden] { display: none; }
 .news-done svg { color: var(--on-accent); margin-top: 2px; flex: none; }
