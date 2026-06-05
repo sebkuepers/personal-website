@@ -41,3 +41,30 @@ MailerLite auto-inlines the `<style>` block on save, so it renders reliably acro
 
 Source: MailerLite [Custom HTML editor](https://www.mailerlite.com/help/how-to-use-the-custom-html-editor)
 and [variables](https://www.mailerlite.com/help/how-to-use-variables-in-mailerlite).
+
+---
+
+## `welcome.html` — welcome email (automation)
+
+Sent once, right after someone confirms. Full brand HTML, same system as the newsletter.
+
+### Set it up as an automation
+1. MailerLite → **Automations → Create workflow**.
+2. **Trigger:** *Subscriber joins a group* → pick the group your form adds people to
+   (if you use no group, use *Completes a form* / *Joins* as available).
+3. Add step **Send email** → choose the **Custom HTML** editor → paste `welcome.html`.
+4. Set subject (e.g. `Welcome to The Drift Letter`) and sender → review → **turn the workflow on**.
+
+> Note: with double opt-in on, the trigger fires only **after** the subscriber confirms,
+> so the welcome email never goes to unconfirmed addresses. Good.
+
+If your automation step only offers the drag-and-drop editor, build a campaign template from
+`welcome.html` first and reuse it, or recreate the blocks with the colors in the table above.
+
+---
+
+## `confirmation-email.md` — double opt-in confirmation
+
+The confirmation email is a **constrained** editor (subject, sender, body text, button/link
+colours — no full HTML). `confirmation-email.md` has the exact copy and brand colours to enter.
+This is the first email a new subscriber receives, so it's worth matching.
