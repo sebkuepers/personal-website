@@ -88,9 +88,9 @@ can redirect alias hosts; everything else is passed straight to the static asset
 (`public/_headers` and the 404 page still apply).
 
 - **Secret:** `MAILERLITE_API_KEY` (Worker → Settings → Variables and Secrets, type *Secret*).
-- **Custom domains:** Worker → Settings → Domains & Routes → add `sebastian-kuepers.com`,
-  `www.sebastian-kuepers.com`, `sebastian-kuepers.de`, `www.sebastian-kuepers.de` (the zones must
-  be on this Cloudflare account). The aliases are redirected in `worker/index.js`.
+- **Custom domains:** `sebastian-kuepers.com`, `sebastian-kuepers.de` and both `www` variants are
+  attached as Custom Domains (Worker → Settings → Domains & Routes — not hand-edited DNS). The
+  aliases 301 to the apex `.com` in `worker/index.js`.
 - **Local test of the Worker:** `npm run build && npx wrangler dev`.
 
 `astro.config.mjs` `site` is the canonical `.com` — update it if the canonical domain changes.
