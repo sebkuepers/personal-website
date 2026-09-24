@@ -57,7 +57,7 @@ src/
 worker/index.js                Canonical-host 301s + /api/subscribe → MailerLite
 public/
   images/  sebastian-portrait.jpg, og-default.jpg (1200×630 share card), covers/
-  favicon.svg, apple-touch-icon.png, robots.txt, _headers
+  favicon.ico, favicon-32.png, icon-192.png, apple-touch-icon.png, robots.txt, _headers
 ```
 
 See [`src/content/README.md`](./src/content/README.md) for how to add essays and ventures.
