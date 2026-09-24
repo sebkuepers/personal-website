@@ -6,7 +6,7 @@ from a Claude Design hand-off (design tokens, type system, layout, and copy lift
 verbatim and reimplemented idiomatically).
 
 Built with **[Astro](https://astro.build)** (static output) + **MDX** for the essay/venture
-content pipeline, and deployed to **Cloudflare Pages**. No client framework — interactivity
+content pipeline, served by a **Cloudflare Worker with static assets**. No client framework — interactivity
 is a few small vanilla-JS islands (sticky nav, mobile menu, language banner, newsletter form).
 
 ## Stack
@@ -16,8 +16,9 @@ is a few small vanilla-JS islands (sticky nav, mobile menu, language banner, new
 | Framework      | Astro 5, `output: 'static'`                                    |
 | Content        | MDX content collections (`src/content/essays`, `.../ventures`) |
 | Styling        | Plain CSS with design tokens (`src/styles/`), no framework     |
-| Fonts          | Newsreader (serif) + Hanken Grotesk (UI), via Google Fonts     |
-| Hosting        | Cloudflare Pages (static)                                      |
+| Fonts          | Newsreader (serif) + Hanken Grotesk (UI), self-hosted (Fontsource) |
+| Hosting        | Cloudflare Worker + static assets (`wrangler.jsonc`, `worker/`) |
+| Newsletter     | MailerLite via `POST /api/subscribe` (double opt-in)           |
 
 ## Develop
 
@@ -50,10 +51,13 @@ src/
     writing/index.astro        Writing archive
     writing/[slug].astro       Essay reading template
     ventures/[slug].astro      Venture detail template
+    impressum.astro, datenschutz.astro   German legal pages (noindex)
+    rss.xml.ts                   RSS feed of published essays
     404.astro
+worker/index.js                Canonical-host 301s + /api/subscribe → MailerLite
 public/
-  images/sebastian-portrait.jpg
-  favicon.svg, robots.txt, _headers
+  images/  sebastian-portrait.jpg, og-default.jpg (1200×630 share card), covers/
+  favicon.svg, apple-touch-icon.png, robots.txt, _headers
 ```
 
 See [`src/content/README.md`](./src/content/README.md) for how to add essays and ventures.
@@ -71,43 +75,37 @@ just needs a control that sets `data-theme="dark"` on `<html>` plus a flash-prev
 
 ## Bilingual (EN / DE)
 
-English is authored. The nav **EN / DE** toggle currently reveals a dismissible banner
-("Die deutsche Fassung folgt in Kürze…") — German content is a future task. The structure is
-i18n-ready: when DE content is written, the natural next step is Astro's i18n routing
-(`/` for EN, `/de/` for DE) with both domains pointing at the same Pages project and a
-domain→locale rule. Until then, both domains serve the English build.
+English is authored. The nav **EN / DE** toggle is hidden (`SITE.showLanguageToggle` in
+`src/site.ts`) until German content exists. When it does, the natural next step is Astro's i18n
+routing (`/` for EN, `/de/` for DE). Until then the Worker 301s `sebastian-kuepers.de` (and the
+`www` variants) to the canonical `.com`.
 
-## Deploy — Cloudflare Pages
+## Deploy — Cloudflare Worker
 
-This is a static site; Cloudflare Pages serves `dist/` directly.
+Pushing to `main` auto-deploys via Cloudflare Workers Builds (`npm run build` → `wrangler deploy`).
+`wrangler.jsonc` serves `dist/` through the `ASSETS` binding with `run_worker_first`, so the Worker
+can redirect alias hosts; everything else is passed straight to the static assets
+(`public/_headers` and the 404 page still apply).
 
-**One-time setup (Git integration — recommended):**
+- **Secret:** `MAILERLITE_API_KEY` (Worker → Settings → Variables and Secrets, type *Secret*).
+- **Custom domains:** Worker → Settings → Domains & Routes → add `sebastian-kuepers.com`,
+  `www.sebastian-kuepers.com`, `sebastian-kuepers.de`, `www.sebastian-kuepers.de` (the zones must
+  be on this Cloudflare account). The aliases are redirected in `worker/index.js`.
+- **Local test of the Worker:** `npm run build && npx wrangler dev`.
 
-1. Push this repo to GitHub/GitLab.
-2. Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** → pick this repo.
-3. Build settings:
-   - **Framework preset:** Astro
-   - **Build command:** `npm run build`
-   - **Build output directory:** `dist`
-   - **Node version:** set env var `NODE_VERSION = 22` (or rely on `.nvmrc`).
-4. **Custom domains** (Pages project → Custom domains): add `sebastian-kuepers.com` and
-   `sebastian-kuepers.de` (and `www` variants if desired). Point the domains' DNS at
-   Cloudflare and create the CNAME/records Pages prompts for.
-
-`public/_headers` already sets long-cache for hashed assets and basic security headers.
 `astro.config.mjs` `site` is the canonical `.com` — update it if the canonical domain changes.
 
-**Direct upload (alternative):** `npm run build` then `npx wrangler pages deploy dist`.
+## Legal & privacy
 
-## Still to do (from the hand-off)
+`/impressum` and `/datenschutz` (German, noindex) read their details from `LEGAL` in
+`src/site.ts`. The site sets **no cookies and loads nothing from third parties** (fonts are
+self-hosted), so no consent banner is needed. If analytics or embeds are ever added, update the
+Datenschutz page and add a consent gate first (telsche.blog has a working pattern).
 
-- Real photography for the placeholder (`.ph`) blocks: essay/venture covers, sizzle-reel
-  still, the "boat" image, article-card covers. Briefed as real, human, natural-material
-  imagery — never abstract tech/stock.
-- Wire the newsletter form ("The Drift Letter") to a real provider — see the marked
-  integration point in `src/components/Newsletter.astro`.
-- Fill in real outbound URLs in `src/site.ts` (`SOCIAL`: LinkedIn, Leading Minds, CIF).
+## Still to do
+
+- Remaining photography: an image for the Masumi page, a sizzle reel (the Speaking section links
+  to the DLD 2025 panel until then), optionally a boat image for "Beyond the work".
+- The three "In progress" essays and the Plan.Net Studios venture page.
 - German content + i18n routing.
-- Optional: dark-mode toggle; the remaining standalone pages (About/Vita, Speaking, Contact)
-  reuse the existing patterns.
-```
+- Optional: dark-mode toggle; standalone About/Vita, Speaking and Contact pages.

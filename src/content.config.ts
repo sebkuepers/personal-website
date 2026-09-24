@@ -23,7 +23,9 @@ const essays = defineCollection({
     pageKicker: z.string().optional(), // e.g. "Manifesto · The flagship essay"
     pageDeck: z.string().optional(), // longer standfirst on the article page
     coverCaption: z.string().optional(),
-    coverPlaceholder: z.string().default('Cover image — supply later'),
+    // Cover image under public/ (e.g. /images/covers/x.jpg), 21:9 crop. No cover → no figure.
+    cover: z.string().optional(),
+    coverAlt: z.string().default(''),
     tags: z.array(z.string()).default([]),
     // Optional pointer to a related venture slug for the "Next:" foot link.
     nextVenture: z.string().optional(),
@@ -51,7 +53,11 @@ const ventures = defineCollection({
     eyebrow: z.string().optional(),
     detailTitle: z.string().optional(), // detail-page h1 (e.g. "Ongiini AI"); falls back to name
     deck: z.string().optional(),
-    coverPlaceholder: z.string().default('In context — supply later'),
+    // Cover image under public/, shown at its natural aspect ratio. No cover → no figure.
+    cover: z.string().optional(),
+    coverAlt: z.string().default(''),
+    // Where the venture lives on the web — shown in the list and on the detail page.
+    link: z.object({ label: z.string(), href: z.string().url() }).optional(),
     facts: z.array(z.object({ k: z.string(), v: z.string() })).default([]),
     throughline: z.string().optional(),
     relatedEssay: z.string().optional(),

@@ -26,6 +26,7 @@ const nextVentureLabel = nextVenture?.data.detailTitle ?? nextVenture?.data.name
   title={d.title}
   description={d.deck}
   ogType="article"
+  ogImage={d.cover}
 >
   <main class="article">
     <div class="wrap art-wrap">
@@ -55,12 +56,12 @@ const nextVentureLabel = nextVenture?.data.detailTitle ?? nextVenture?.data.name
       </div>
     </header>
 
-    <figure class="art-cover-wrap wrap-wide">
-      <div class="ph art-cover" role="img" aria-label="Cover image">
-        <span class="ph-tag"><Icon name="waves" size={13} />{d.coverPlaceholder}</span>
-      </div>
-      {d.coverCaption && <figcaption class="meta art-cap">{d.coverCaption}</figcaption>}
-    </figure>
+    {d.cover && (
+      <figure class="art-cover-wrap wrap-wide">
+        <img class="art-cover img-cover" src={d.cover} alt={d.coverAlt} width="1600" height="685" />
+        {d.coverCaption && <figcaption class="meta art-cap">{d.coverCaption}</figcaption>}
+      </figure>
+    )}
 
     <article class="wrap art-body">
       <Content />

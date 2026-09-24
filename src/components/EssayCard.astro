@@ -1,0 +1,25 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  essay: CollectionEntry<'essays'>;
+  cls?: string;
+}
+const { essay, cls = '' } = Astro.props;
+const d = essay.data;
+const published = d.status === 'published';
+const fmtDate = (date: Date) =>
+  date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
+// Upcoming essays are teasers: not a link, and no date (they are not out yet).
+const Tag = published ? 'a' : 'div';
+---
+<Tag
+  class:list={['article-card', cls, { 'is-upcoming': !published }]}
+  {...(published ? { href: `/writing/${essay.id}` } : {})}
+>
+  <p class="meta article-kicker">{d.kicker}{published && ` · ${d.readTime}`}</p>
+  <h4 class="serif article-title">{d.title}</h4>
+  <p class="article-deck">{d.deck}</p>
+  <span class="article-date meta">{published ? fmtDate(d.date) : 'In progress'}</span>
+</Tag>

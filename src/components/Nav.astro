@@ -24,11 +24,13 @@ else if (path.startsWith('/ventures')) activeId = 'ventures';
       ))}
     </nav>
     <div class="nav-end">
-      <div class="lang" role="group" aria-label="Language" data-lang>
-        <button type="button" class="on" data-lang-set="EN">EN</button>
-        <span aria-hidden="true">/</span>
-        <button type="button" data-lang-set="DE">DE</button>
-      </div>
+      {SITE.showLanguageToggle && (
+        <div class="lang" role="group" aria-label="Language" data-lang>
+          <button type="button" class="on" data-lang-set="EN">EN</button>
+          <span aria-hidden="true">/</span>
+          <button type="button" data-lang-set="DE">DE</button>
+        </div>
+      )}
       <a class="btn btn-primary nav-cta" href={SITE.contactAnchor}>
         Work with me<Icon name="arrowRight" size={15} cls="arrow" />
       </a>

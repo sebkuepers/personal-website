@@ -15,9 +15,24 @@
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// One canonical host. The .de domain (English build until German content
+// exists) and the www variants 301 to it once they are attached to this Worker.
+const CANONICAL_HOST = 'sebastian-kuepers.com';
+const ALIAS_HOSTS = new Set([
+  'www.sebastian-kuepers.com',
+  'sebastian-kuepers.de',
+  'www.sebastian-kuepers.de',
+]);
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+
+    if (ALIAS_HOSTS.has(url.hostname)) {
+      url.hostname = CANONICAL_HOST;
+      url.protocol = 'https:';
+      return Response.redirect(url.toString(), 301);
+    }
 
     if (url.pathname === '/api/subscribe') {
       if (request.method !== 'POST') {

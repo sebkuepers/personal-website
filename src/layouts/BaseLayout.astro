@@ -1,41 +1,69 @@
 ---
+// Self-hosted fonts (no request to Google → no GDPR transfer; LG München I, 2022).
+import '@fontsource-variable/newsreader/opsz.css';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource-variable/hanken-grotesk/wght.css';
 import '@/styles/global.css';
 import '@/styles/components.css';
 import Nav from '@/components/Nav.astro';
 import Footer from '@/components/Footer.astro';
 import Icon from '@/components/Icon.astro';
-import { SITE } from '@/site';
+import { SITE, SOCIAL } from '@/site';
 
 interface Props {
   title?: string;
   description?: string;
-  /** Path-relative or absolute OG image. Defaults to the portrait. */
+  /** Path-relative or absolute OG image (1200×630). Defaults to the brand card. */
   ogImage?: string;
   ogType?: 'website' | 'article';
+  /** Document language — the legal pages are German. */
+  lang?: 'en' | 'de';
+  /** Keep utility pages (legal, 404) out of search results. */
+  noindex?: boolean;
 }
+
+const DEFAULT_OG = '/images/og-default.jpg';
 
 const {
   title,
   description = SITE.description,
-  ogImage = '/images/sebastian-portrait.jpg',
+  ogImage = DEFAULT_OG,
   ogType = 'website',
+  lang = 'en',
+  noindex = false,
 } = Astro.props;
 
 const pageTitle = title ? `${title} — ${SITE.name}` : `${SITE.name} — Architect of the agentic economy`;
 const canonical = new URL(Astro.url.pathname, SITE.url).href;
 const ogImageUrl = new URL(ogImage, SITE.url).href;
+
+// schema.org Person — helps search engines connect the site to the person.
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: SITE.name,
+  url: SITE.url,
+  image: new URL('/images/sebastian-portrait.jpg', SITE.url).href,
+  jobTitle: 'Founder, advisor & writer',
+  description: SITE.description,
+  sameAs: Object.values(SOCIAL).filter(Boolean),
+};
 ---
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="alternate" type="application/rss+xml" title={`${SITE.name} — Writing`} href="/rss.xml" />
+    <meta name="theme-color" content="#f5f3ec" />
     <meta name="generator" content={Astro.generator} />
 
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
 
     <!-- Open Graph / Twitter -->
     <meta property="og:type" content={ogType} />
@@ -48,20 +76,17 @@ const ogImageUrl = new URL(ogImage, SITE.url).href;
     <meta name="twitter:title" content={pageTitle} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
+    {ogImage === DEFAULT_OG && <meta property="og:image:width" content="1200" />}
+    {ogImage === DEFAULT_OG && <meta property="og:image:height" content="630" />}
 
-    <!-- Fonts: Newsreader (display + reading serif) · Hanken Grotesk (UI) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,300;1,6..72,400&family=Hanken+Grotesk:wght@400;500;600;700&display=swap"
-    />
+    {ogType === 'website' && <script type="application/ld+json" set:html={JSON.stringify(personLd)} />}
+
   </head>
   <body>
     <Nav />
 
     <!-- German content is a future task; the DE language toggle reveals this. -->
-    <div class="lang-note" data-lang-note hidden>
+    {SITE.showLanguageToggle && <div class="lang-note" data-lang-note hidden>
       <div class="wrap-wide lang-note-inner">
         <Icon name="globe" size={15} />
         <span>Die deutsche Fassung folgt in Kürze. Diese Seite ist vorerst auf Englisch.</span>
@@ -69,7 +94,7 @@ const ogImageUrl = new URL(ogImage, SITE.url).href;
           <Icon name="close" size={15} />
         </button>
       </div>
-    </div>
+    </div>}
 
     <slot />
 

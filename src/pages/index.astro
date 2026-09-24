@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
 import Newsletter from '@/components/Newsletter.astro';
+import EssayCard from '@/components/EssayCard.astro';
 import { getCollection } from 'astro:content';
 import { HERO, CURRENTLY, PRINCIPLES, SPEAKING, THREADS } from '@/data/home';
 import { SITE, SOCIAL } from '@/site';
@@ -20,8 +21,6 @@ const ventures = (await getCollection('ventures')).sort(
   (a, b) => a.data.order - b.data.order,
 );
 
-const essayHref = (e: (typeof essays)[number]) =>
-  e.data.status === 'published' ? `/writing/${e.id}` : '/writing';
 ---
 <BaseLayout>
   <main class="home">
@@ -103,10 +102,12 @@ const essayHref = (e: (typeof essays)[number]) =>
         </header>
 
         {flagship && (
-          <a class="flagship reveal d1" href={essayHref(flagship)}>
-            <div class="ph flagship-img" role="img" aria-label={`${flagship.data.title} cover`}>
-              <span class="ph-tag"><Icon name="waves" size={13} />{flagship.data.coverPlaceholder}</span>
-            </div>
+          <a class="flagship reveal d1" href={`/writing/${flagship.id}`}>
+            {flagship.data.cover ? (
+              <img class="flagship-img img-cover" src={flagship.data.cover} alt={flagship.data.coverAlt} loading="lazy" />
+            ) : (
+              <div class="ph flagship-img" aria-hidden="true" />
+            )}
             <div class="flagship-body">
               <p class="meta flagship-kicker">
                 <span class="dot" /> {flagship.data.kicker} · {flagship.data.readTime} · {fmtDate(flagship.data.date)}
@@ -120,12 +121,7 @@ const essayHref = (e: (typeof essays)[number]) =>
 
         <div class="article-grid">
           {restEssays.map((a, i) => (
-            <a class={`article-card reveal d${i + 1}`} href={essayHref(a)}>
-              <p class="meta article-kicker">{a.data.kicker} · {a.data.readTime}</p>
-              <h4 class="serif article-title">{a.data.title}</h4>
-              <p class="article-deck">{a.data.deck}</p>
-              <span class="article-date meta">{fmtDate(a.data.date)}</span>
-            </a>
+            <EssayCard essay={a} cls={`reveal d${i + 1}`} />
           ))}
         </div>
       </div>
@@ -188,17 +184,40 @@ const essayHref = (e: (typeof essays)[number]) =>
             ))}
           </ul>
           <div class="speaking-cta">
-            <a class="btn btn-primary" href={SOCIAL.leadingMinds} target="_blank" rel="noopener noreferrer">
-              Book me to speak<Icon name="arrowUpRight" size={15} />
+            {SOCIAL.leadingMinds ? (
+              <>
+                <a class="btn btn-primary" href={SOCIAL.leadingMinds} target="_blank" rel="noopener noreferrer">
+                  Book me to speak<Icon name="arrowUpRight" size={15} />
+                </a>
+                <span class="meta">Speaking is booked through <strong>Leading Minds</strong>.</span>
+              </>
+            ) : (
+              <a class="btn btn-primary" href={`mailto:${SITE.email}?subject=Speaking%20request`}>
+                Book me to speak<Icon name="arrowRight" size={15} cls="arrow" />
+              </a>
+            )}
+          </div>
+
+          {/* ── Contact: the target of every "Work with me" button ─────── */}
+          <div class="contact" id="contact">
+            <p class="eyebrow">Work together</p>
+            <p class="contact-lead serif">
+              Advisory, board work, or a conversation about building AI your organisation can stand
+              behind — write to me directly.
+            </p>
+            <a class="contact-mail link-u" href={`mailto:${SITE.email}`}>
+              {SITE.email}<Icon name="arrowRight" size={15} cls="arrow" />
             </a>
-            <span class="meta">Speaking is booked through <strong>Leading Minds</strong>.</span>
           </div>
         </div>
         <div class="speaking-aside reveal d1">
-          <div class="ph speaking-reel" role="img" aria-label="Talk sizzle reel">
-            <span class="ph-tag"><Icon name="mic" size={13} />Sizzle reel — supply later</span>
+          {/* Until a sizzle reel exists: link out to a real recorded talk. */}
+          <a class="speaking-watch" href={SPEAKING.watch.href} target="_blank" rel="noopener noreferrer">
+            <span class="eyebrow accent">Watch</span>
+            <span class="display speaking-watch-title">{SPEAKING.watch.title}</span>
+            <span class="meta">{SPEAKING.watch.meta}</span>
             <span class="reel-play" aria-hidden="true"><Icon name="arrowRight" size={22} /></span>
-          </div>
+          </a>
           <dl class="speaking-stats">
             {SPEAKING.stats.map((s) => (
               <div><dt class="meta">{s.label}</dt><dd class="serif">{s.value}</dd></div>

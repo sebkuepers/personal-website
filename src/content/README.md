@@ -23,7 +23,8 @@ featured: false            # true = the big flagship block (use on one essay onl
 pageKicker: Essay · A longer label for the article header
 pageDeck: A longer standfirst shown on the article page itself.
 coverCaption: Optional caption under the cover image.
-coverPlaceholder: Cover image — supply later
+cover: /images/covers/my-essay.jpg   # optional, 21:9 crop in public/images/covers/
+coverAlt: What the photo shows
 tags: [Agency, Design ethics]
 nextVenture: ongiini       # optional "Next:" foot link to a venture slug
 ---
@@ -73,7 +74,9 @@ blurb: One-paragraph description shown in the list.
 eyebrow: Parent org or context line
 detailTitle: Detail-page H1 (falls back to name)
 deck: Standfirst on the detail page.    # quote it if it contains a colon
-coverPlaceholder: In context — supply later
+cover: /images/covers/my-venture.jpg   # optional, natural ratio
+coverAlt: What the image shows
+link: { label: Visit example.com, href: "https://example.com/" }   # optional
 facts:
   - { k: Founded, v: "2024" }
   - { k: Location, v: Namibia }

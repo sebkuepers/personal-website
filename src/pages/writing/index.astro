@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Icon from '@/components/Icon.astro';
 import Newsletter from '@/components/Newsletter.astro';
+import EssayCard from '@/components/EssayCard.astro';
 import { getCollection } from 'astro:content';
 import '@/styles/home.css';
 import '@/styles/article.css';
@@ -15,8 +16,6 @@ const essays = (await getCollection('essays')).sort(
 const flagship = essays.find((e) => e.data.featured) ?? essays[0];
 const rest = essays.filter((e) => e.id !== flagship?.id);
 
-const essayHref = (e: (typeof essays)[number]) =>
-  e.data.status === 'published' ? `/writing/${e.id}` : '/writing';
 ---
 <BaseLayout
   title="Writing"
@@ -41,10 +40,12 @@ const essayHref = (e: (typeof essays)[number]) =>
     <section class="section">
       <div class="wrap">
         {flagship && (
-          <a class="flagship" href={essayHref(flagship)}>
-            <div class="ph flagship-img" role="img" aria-label={`${flagship.data.title} cover`}>
-              <span class="ph-tag"><Icon name="waves" size={13} />{flagship.data.coverPlaceholder}</span>
-            </div>
+          <a class="flagship" href={`/writing/${flagship.id}`}>
+            {flagship.data.cover ? (
+              <img class="flagship-img img-cover" src={flagship.data.cover} alt={flagship.data.coverAlt} loading="lazy" />
+            ) : (
+              <div class="ph flagship-img" aria-hidden="true" />
+            )}
             <div class="flagship-body">
               <p class="meta flagship-kicker">
                 <span class="dot" /> {flagship.data.kicker} · {flagship.data.readTime} · {fmtDate(flagship.data.date)}
@@ -58,12 +59,7 @@ const essayHref = (e: (typeof essays)[number]) =>
 
         <div class="article-grid">
           {rest.map((a) => (
-            <a class="article-card" href={essayHref(a)}>
-              <p class="meta article-kicker">{a.data.kicker} · {a.data.readTime}</p>
-              <h4 class="serif article-title">{a.data.title}</h4>
-              <p class="article-deck">{a.data.deck}</p>
-              <span class="article-date meta">{fmtDate(a.data.date)}</span>
-            </a>
+            <EssayCard essay={a} />
           ))}
         </div>
       </div>

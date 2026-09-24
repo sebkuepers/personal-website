@@ -1,11 +1,64 @@
 ---
 name: Masumi Network
 role: Co-founder
-years: 2023 —
+years: 2024 —
 thesis: Trust
 order: 2
-status: upcoming
-blurb: Identity and payment infrastructure for agent commerce, with compliance and auditability as the moat. The plumbing the agentic economy runs on.
+status: published
+blurb: An open protocol on Cardano that gives AI agents verifiable identity, a way to pay each other, and an audit trail. The plumbing the agentic economy runs on.
+eyebrow: With NMKR · Serviceplan Group
+detailTitle: Masumi
+deck: "An open protocol that gives AI agents what every economic actor needs: an identity you can verify, a way to get paid, and a record of what was done. Unglamorous plumbing — and the difference between a demo and an economy."
+link: { label: Visit masumi.network, href: "https://masumi.network/" }
+facts:
+  - { k: Launched, v: November 2024 }
+  - { k: Built on, v: Cardano }
+  - { k: Provides, v: "Identity · payment · audit" }
+  - { k: Built with, v: NMKR }
+throughline: An economy of agents is only as trustworthy as the infrastructure that lets you ask, afterwards, who did what, for whom, and why.
+relatedEssay: slow-intelligence
 ---
+import Icon from '@/components/Icon.astro';
 
-_A detailed case study is coming. For now, see the Trust principle on the home page._
+<section class="vp-section">
+  <h2 class="serif vp-h2">What it is</h2>
+  <div class="vp-prose">
+    <p>AI agents are starting to do real work — and increasingly, work for each other. But an agent on
+      its own has no passport, no bank account, and no paper trail. Masumi supplies all three: a
+      decentralised identity and registry so you know which agent you are dealing with, escrowed
+      payments so agents can buy and sell services, and on-chain records of every transaction.</p>
+    <p>The idea came from building agents at Plan.Net and seeing the gap. I took it to Patrick Tobler
+      and the team at NMKR, and together with Serviceplan Group we launched Masumi in November 2024.</p>
+  </div>
+</section>
+
+<blockquote class="art-quote vp-quote">
+  <Icon name="quote" size={28} cls="art-quote-mark" />
+  <p class="serif">AI agents will be the breakthrough app that blockchain has been waiting for.</p>
+</blockquote>
+
+<section class="vp-section">
+  <h2 class="serif vp-h2">Why it matters</h2>
+  <div class="vp-prose">
+    <p>Every economy runs on boring infrastructure: identity, payment, contracts, records. Nobody writes
+      keynotes about them, and nothing works without them. If agents are going to transact at scale, the
+      question of accountability cannot be answered after the fact by a platform's goodwill. It has to be
+      answerable by the system itself.</p>
+    <p>That is why Masumi is an open protocol rather than a walled garden — the trust layer should not
+      belong to whoever happens to own the biggest marketplace.</p>
+  </div>
+</section>
+
+<section class="vp-section">
+  <h2 class="serif vp-h2">How it holds to the principle</h2>
+  <div class="vp-prose">
+    <ul class="vp-principles">
+      <li><span class="vp-pk">Verifiable identity</span> Agents are registered and recognisable, so
+        reputation can accrue to the right actor.</li>
+      <li><span class="vp-pk">Payment with escrow</span> Money moves when work is delivered — not on a
+        promise.</li>
+      <li><span class="vp-pk">An audit trail by default</span> Decisions and transactions leave a record
+        anyone entitled to can inspect.</li>
+    </ul>
+  </div>
+</section>

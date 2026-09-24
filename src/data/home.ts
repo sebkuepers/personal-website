@@ -17,10 +17,10 @@ export const HERO = {
 
 // ── Credibility strip ───────────────────────────────────────────────────────
 export const CURRENTLY: string[] = [
-  'Founder, Sokosumi',
-  'Common Intelligence Foundation',
-  'Masumi Network',
-  'Plan.Net Studios · Serviceplan Group',
+  'Managing Director, Plan.Net Studios',
+  'Co-founder, Sōkosumi & Masumi Network',
+  'Founder, Common Intelligence Foundation',
+  'Serviceplan Group',
 ];
 
 // ── Thesis principles ───────────────────────────────────────────────────────
@@ -35,13 +35,13 @@ export const PRINCIPLES: Principle[] = [
     icon: 'shield',
     k: 'Sovereignty',
     t: 'Keep capability close to the people and places it serves.',
-    d: 'Ongiini runs on hardware located in Namibia and speaks Oshiwambo first. Sovereignty is a design decision, not a press release.',
+    d: 'Ongiini runs on hardware we operate ourselves — no US cloud in the pipeline — and is on its way to Namibia, with Oshiwambo built in as infrastructure. Sovereignty is a design decision, not a press release.',
   },
   {
     icon: 'compass',
     k: 'Trust',
     t: 'Make accountability part of the architecture, not a promise bolted on.',
-    d: 'Sokosumi keeps a permanent human Trust & Accountability layer. Masumi makes identity and audit the moat. Trust you can inspect.',
+    d: 'Masumi gives AI agents verifiable identity, payment, and an on-chain audit trail. Sōkosumi puts that accountability behind every job an agent does. Trust you can inspect.',
   },
   {
     icon: 'waves',
@@ -61,8 +61,14 @@ export const SPEAKING = {
     'Slow Intelligence — resisting the Drift in your organisation',
     'Trust as architecture: building AI institutions can stand behind',
   ],
+  // A recorded talk to link to until a sizzle reel exists.
+  watch: {
+    title: 'Agentic AI: What’s Next?',
+    meta: 'Panel · DLD Munich 2025',
+    href: 'https://dldnews.com/videos/agentic-ai-whats-next/',
+  },
   stats: [
-    { label: 'Stages', value: 'DLD · OMR · re:publica' },
+    { label: 'Stages', value: 'DLD · Cardano Summit · Digital Day' },
     { label: 'Formats', value: 'Keynote · fireside · workshop' },
     { label: 'Languages', value: 'English · German' },
   ],

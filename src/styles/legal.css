@@ -1,0 +1,24 @@
+/* ============================================================================
+   Legal pages (Impressum, Datenschutz) — quiet, compact prose on the article
+   header. Same reading column, smaller type, no drop cap or pull quotes.
+   ============================================================================ */
+
+.legal .art-title { font-size: clamp(2.6rem, 6vw, 4.5rem); }
+.legal-body { max-width: 40rem; padding-top: var(--s-5); padding-bottom: var(--s-7); }
+.legal-body h2 {
+  font-family: var(--font-display); font-size: clamp(1.3rem, 2.4vw, 1.6rem);
+  font-weight: 500; line-height: 1.2; color: var(--ink);
+  margin: var(--s-5) 0 0.8rem;
+}
+.legal-body h2:first-child { margin-top: 0; }
+.legal-body p, .legal-body li {
+  font-family: var(--font-read); font-size: 1.1rem; line-height: 1.6; color: var(--ink-2);
+  text-wrap: pretty;
+}
+.legal-body p { margin: 0 0 1rem; }
+.legal-body ul { margin: 0 0 1rem; padding-left: 1.2rem; }
+.legal-body li { margin-bottom: 0.35rem; }
+.legal-body strong { color: var(--ink); font-weight: 500; }
+.legal-body a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.legal-body address { font-style: normal; }
+.legal-stand { margin-top: var(--s-5) !important; color: var(--ink-3) !important; font-size: 0.95rem !important; }

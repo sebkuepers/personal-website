@@ -21,6 +21,7 @@ const relatedEssay = d.relatedEssay ? await getEntry('essays', d.relatedEssay) :
   title={d.detailTitle ?? d.name}
   description={d.deck ?? d.blurb}
   ogType="article"
+  ogImage={d.cover}
 >
   <main class="venture-page">
     <div class="wrap art-wrap">
@@ -36,13 +37,18 @@ const relatedEssay = d.relatedEssay ? await getEntry('essays', d.relatedEssay) :
       </div>
       <h1 class="display vp-title">{d.detailTitle ?? d.name}</h1>
       {d.deck && <p class="lead vp-deck">{d.deck}</p>}
+      {d.link && (
+        <a class="link-u vp-link" href={d.link.href} target="_blank" rel="noopener noreferrer">
+          {d.link.label}<Icon name="arrowUpRight" size={15} />
+        </a>
+      )}
     </header>
 
-    <figure class="vp-cover-wrap wrap-wide">
-      <div class="ph vp-cover" role="img" aria-label={`${d.detailTitle ?? d.name} in context`}>
-        <span class="ph-tag"><Icon name="globe" size={13} />{d.coverPlaceholder}</span>
-      </div>
-    </figure>
+    {d.cover && (
+      <figure class="vp-cover-wrap wrap-wide">
+        <img class="vp-cover-img" src={d.cover} alt={d.coverAlt} />
+      </figure>
+    )}
 
     {d.facts.length > 0 && (
       <section class="wrap vp-facts-wrap">

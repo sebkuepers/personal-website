@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { LEGAL } from '@/site';
+import '@/styles/article.css';
+import '@/styles/legal.css';
+
+const tel = LEGAL.phone.replace(/\s/g, '');
+---
+<BaseLayout title="Impressum" description="Impressum — Angaben gemäß § 5 DDG." lang="de" noindex>
+  <main class="article legal">
+    <header class="wrap art-head">
+      <p class="eyebrow accent art-kicker">Legal notice</p>
+      <h1 class="display art-title">Impressum</h1>
+    </header>
+
+    <div class="wrap legal-body">
+      <h2>Angaben gemäß § 5 DDG</h2>
+      <address>
+        <p>{LEGAL.name}<br />{LEGAL.street}<br />{LEGAL.city}<br />{LEGAL.country}</p>
+      </address>
+
+      <h2>Kontakt</h2>
+      <p>
+        Telefon: <a href={`tel:${tel}`}>{LEGAL.phone}</a><br />
+        E-Mail: <a href={`mailto:${LEGAL.email}`}>{LEGAL.email}</a>
+      </p>
+
+      <h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2>
+      <p>{LEGAL.name}, Anschrift wie oben.</p>
+
+      <h2>Haftung für Links</h2>
+      <p>
+        Diese Website enthält Links zu externen Websites Dritter, auf deren Inhalte ich keinen
+        Einfluss habe. Für diese fremden Inhalte ist stets der jeweilige Anbieter oder Betreiber
+        verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar; bei
+        Bekanntwerden von Rechtsverletzungen entferne ich derartige Links umgehend.
+      </p>
+
+      <h2>Urheberrecht</h2>
+      <p>
+        Texte, Fotos und Gestaltung dieser Website unterliegen dem deutschen Urheberrecht.
+        Vervielfältigung, Bearbeitung und Verbreitung außerhalb der Grenzen des Urheberrechts
+        bedürfen der schriftlichen Zustimmung. Zitate mit Quellenangabe sind willkommen.
+      </p>
+
+      <p class="legal-stand">Datenschutzhinweise: <a href="/datenschutz">Datenschutzerklärung</a></p>
+    </div>
+  </main>
+</BaseLayout>

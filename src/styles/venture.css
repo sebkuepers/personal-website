@@ -43,3 +43,7 @@
   padding: clamp(1.5rem, 3vw, 2.5rem); display: flex; flex-direction: column; gap: 1.6rem; }
 .vp-foot-card .link-u { white-space: normal; }
 .vp-foot-line { font-size: clamp(1.4rem, 2.6vw, 1.9rem); line-height: 1.25; margin: 0.6rem 0 0; color: var(--ink); text-wrap: pretty; }
+
+/* Venture cover: product shots keep their natural ratio instead of a 21:9 crop. */
+.vp-cover-img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 3px; background: var(--paper-2); }
+.vp-link { margin-top: 1.6rem; }

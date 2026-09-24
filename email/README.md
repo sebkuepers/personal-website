@@ -28,8 +28,8 @@ MailerLite auto-inlines the `<style>` block on save, so it renders reliably acro
 ### Required / dynamic tags (MailerLite merge tags — leave these as-is)
 - `{$unsubscribe}` — unsubscribe link. **Required** — MailerLite won't send without one.
 - `{$url}` — "view in browser" link.
-- `{$account.company}` — your account/company name in the footer address line.
-- Update the postal address line to your real address (GDPR / CAN-SPAM require a physical address).
+- The footer address line carries the Impressum postal address (Hibiskusweg 17b, 13089 Berlin) —
+  GDPR / CAN-SPAM require a physical address. Keep it in step with `LEGAL` in `src/site.ts`.
 
 ### Notes
 - **Fonts:** Newsreader + Hanken Grotesk load via web font in Apple Mail / iOS Mail.
