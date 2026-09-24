@@ -7,7 +7,7 @@ interface Props {
 const { small = false } = Astro.props;
 ---
 <a class="wordmark" href="/" aria-label={`${SITE.name} — home`}>
-  <img class="wm-mark wm-avatar" src="/images/avatar.jpg" alt="" width="34" height="34" />
+  <img class="wm-mark wm-avatar" src="/images/avatar.jpg?v=2" alt="" width="34" height="34" />
   <span class="wm-text">
     <span class="wm-name">{SITE.name}</span>
     {!small && <span class="wm-sub">{SITE.wordmarkSub}</span>}
