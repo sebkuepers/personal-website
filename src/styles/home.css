@@ -18,6 +18,16 @@
 .hero { padding-top: var(--s-6); padding-bottom: var(--s-6); }
 .hero-head { font-size: var(--t-mega); margin: 1.1rem 0 0; }
 .hero-head em { font-style: italic; color: var(--accent); }
+.hero-name {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: var(--t-body);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--ink-2);
+  margin-bottom: 0.75rem;
+}
 .hero-lead { margin-top: 1.6rem; max-width: 46ch; }
 .hero-ctas { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 2.2rem; }
 

@@ -42,10 +42,15 @@ const personLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: SITE.name,
+  alternateName: 'Sebastian Kuepers',
+  givenName: 'Sebastian',
+  familyName: 'Küpers',
   url: SITE.url,
   image: new URL('/images/sebastian-portrait.jpg', SITE.url).href,
   jobTitle: 'Founder, advisor & writer',
   description: SITE.description,
+  homeLocation: { '@type': 'Place', name: 'Berlin, Germany' },
+  knowsAbout: ['agentic economy', 'AI sovereignty', 'artificial intelligence', 'digital transformation'],
   sameAs: Object.values(SOCIAL).filter(Boolean),
 };
 ---
