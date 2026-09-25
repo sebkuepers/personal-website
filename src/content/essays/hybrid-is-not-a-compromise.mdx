@@ -1,7 +1,7 @@
 ---
 title: Hybrid is not a compromise
 kicker: Field note
-deck: Going all-in on hybrid agent architecture — humans and agents, cloud and on-premise, frontier and open source — and why mixing the layers is a sovereignty decision, not a hedge.
+deck: We rebuilt our development around a hybrid Agent Fleet — frontier and open source models, cloud and our own hardware, humans and agents. Here is what running it taught us.
 date: 2026-09-25
 readTime: 8 min
 status: published
@@ -14,131 +14,124 @@ nextVenture: sokosumi
 ---
 
 <p class="art-lede-p">
-  <span class="dropcap">W</span>e are going all-in on hybrid, in every layer of how we build with AI
-  agents. The word sounds like a hedge — half one thing, half another, the coward's middle. But that
-  is not what hybrid is. Done properly, hybrid is not a compromise between two options. It is the
-  deliberate refusal to let <em>any single option</em> become a dependency. It is sovereignty applied
-  to architecture: every layer of the stack gets a counterpart, so that no vendor, no cloud, no model
-  family, and no single machine holds the only key to your ability to think and ship.
+  <span class="dropcap">I</span>t started with a shelf of Mac Minis running hot in a corner of the
+  office and a question that would not go away: if a meaningful share of our intellectual output now
+  flows through language models, why do we still treat those models like a subscription someone else
+  manages for us? We would never run a factory on a single supplier with no backup line. We would
+  never power a hospital from one grid with no fallback. And yet there we were — an entire
+  development organisation, thinking through a single pipe, priced by someone else, throttled by
+  someone else, available exactly when someone else's capacity allowed.
 </p>
 
 <p>
-  The immediate occasion is practical. Over the last weeks we rebuilt the way we develop at Plan.Net
-  Studios around what we call the <strong>Agent Fleet</strong> — a standing crew of AI agents that
-  works on our codebase around the clock. The fleet is deliberately hybrid at every joint:
-  <strong>humans combined with agents</strong>, <strong>cloud combined with on-premise
-  infrastructure</strong>, <strong>premium frontier models combined with open source models</strong>,
-  <strong>a coding harness combined with an orchestration harness</strong>. One layer of each kind,
-  always. Not because we could not pick a winner, but because a stack with only one of anything is a
-  stack with a single point of failure — and in an agentic workflow, the failure is not an outage.
-  It is a stoppage of thinking.
+  So over the last weeks we changed how we develop at Plan.Net Studios. The result is what we call
+  the <strong>Agent Fleet</strong> — a standing crew of AI agents that works on our codebase around
+  the clock — and the architecture that emerged is hybrid at every single layer. Not hybrid as a
+  hedge. Hybrid as a decision about who controls the conditions of our own thinking.
 </p>
 
-<h2 class="serif art-h2">The fleet, concretely</h2>
+<h2 class="serif art-h2">What actually runs</h2>
 
 <p>
-  In practice it looks like this. <strong>Claude Code</strong> is our primary coding harness, running
-  the Claude models for the work where frontier quality matters most. <strong>OpenClaw</strong> is
-  the assistant and orchestration harness, running open source models — currently Nemotron 3 Super —
-  with OpenShell providing the guardrails that make an autonomous agent in your infrastructure
-  something you can actually live with. A stack of Mac Minis works on the codebase 24/7 without
-  interruption: end-to-end tests, refactoring, bug-fixing, the tireless maintenance work that humans
-  procrastinate on and agents never do. A <strong>DGX Spark</strong> runs the open source models
-  locally — orchestration and support layer, and overflow capacity for the moments when the frontier
-  cloud slows down or hits capacity, which is happening more often than anyone's marketing would
-  suggest.
+  The setup, concretely: <strong>Claude Code</strong> is our primary coding harness on the Claude
+  models, for the work where frontier quality earns its price. <strong>OpenClaw</strong> is the
+  assistant and orchestration harness, running open source models — currently Nemotron 3 Super —
+  with <strong>OpenShell</strong> supplying the guardrails. A stack of Mac Minis works on the
+  codebase 24/7 without interruption: end-to-end testing, refactoring, bug-fixing — the maintenance
+  work humans postpone and agents never tire of. A <strong>DGX Spark</strong> sits on-premise,
+  running the open source models as the orchestration and support layer, and as overflow capacity
+  for those moments when the frontier cloud slows down or hits its limits — which is happening more
+  often now than any roadmap slide admits.
 </p>
 
 <p>
-  The humans do not babysit this fleet one task at a time. A central <strong>Nexus agent</strong> is
-  how the fleet becomes addressable — through Telegram, through email, and through
-  <strong>Sōkosumi</strong>, our own agentic services marketplace, where an agent is commissioned
-  the way you would brief a colleague. And the fleet coordinates itself through GitHub: issues,
-  branches, pull requests, review. The infrastructure of software collaboration turned out to be
-  the natural nervous system for agent collaboration too. Every artefact of the work — every
-  decision, every diff — lands where humans can inspect it.
+  Nobody herds this fleet task by task. A central <strong>Nexus agent</strong> makes it addressable —
+  from Telegram, from email, and from <strong>Sōkosumi</strong>, where an agent is commissioned the
+  way you would brief a colleague. The fleet coordinates itself through GitHub: issues, branches,
+  pull requests, review. It turns out the infrastructure software teams already trusted to carry
+  their collaboration carries agent collaboration just as well. Every diff, every decision lands
+  where a human can inspect it. That is not a nice-to-have. That is the whole difference between a
+  fleet you command and a fleet you merely hope about.
 </p>
 
 <blockquote class="art-quote">
   <p class="serif">
-    When your intellectual value creation depends on tokens, tokens are no longer a purchase. They
-    are infrastructure — and infrastructure is judged on throughput, cost, uptime, and who
-    controls it.
+    When thinking becomes a process, it acquires a supply chain — and a supply chain is only as
+    sovereign as its second option.
   </p>
 </blockquote>
 
-<h2 class="serif art-h2">Token economics is infrastructure thinking</h2>
+<h2 class="serif art-h2">The operator's questions</h2>
 
 <p>
-  Something shifts in how you think the moment more of your actual intellectual output flows through
-  a model. You stop shopping for a chat subscription and start thinking like an operator: constant
-  token throughput, cost per token generated, uptime of token production, and the ratio of humans
-  to tokens produced. None of that is exotic. It is the same logic anyone who ever ran a factory, a
-  power grid, or a data centre would recognise immediately. What is new is only that the production
-  line is now the act of thinking.
+  The moment you frame it that way, the right questions stop being chat-subscription questions and
+  become operator questions. Constant token throughput. Cost per token generated. Uptime of token
+  production. The ratio of humans to tokens produced. There is nothing exotic on that list — it is
+  the same sheet any plant manager, grid operator, or data-centre lead has kept for a century. What
+  is new is only what sits at the end of the line: the act of thinking itself.
 </p>
 
 <p>
-  This is where open source models have quietly crossed a line. Models like Nemotron 3 Super or the
-  current Qwen generation produce tokens at a fundamentally different price point, at good speed —
-  and, more importantly, at a level of quality that lets them take over production-relevant tasks
-  rather than toy ones. That changes the shape of a sensible architecture. Premium frontier models
-  are no longer the only engine; they become the premium layer, reserved for the work that needs
-  them, while open source capacity carries the load that does not. Dependency on any single
-  provider drops, resilience rises, and cost stops being a reason to think less.
+  What made this architecture possible <em>now</em> is that open source models crossed a line.
+  Nemotron 3 Super, the current Qwen generation, their peers — they produce tokens at a completely
+  different price point, at respectable speed, and at a quality level that lets you hand them
+  production-relevant work instead of demos. That changes the math. Frontier models stop being the
+  only engine and become the premium layer — used where their quality pays for itself — while open
+  source capacity carries the volume. Cost stops being a reason to think less. Dependency on any
+  one provider stops being a fact on the floor.
 </p>
 
 <p>
-  I will admit I ignored OpenClaw for work purposes for a long time. What changed my mind was
-  guardrails — OpenShell and the patterns around it give you enough control over what an autonomous
-  agent can and cannot touch that incorporating it stops being an act of faith. Trust, as I keep
-  arguing, is an architecture, not a feeling. The same is true for adoption: you adopt what you can
-  inspect and contain.
+  A confession: I ignored OpenClaw for work purposes for a long time. What moved me was not a
+  benchmark, it was <strong>guardrails</strong> — OpenShell gives you enough control over what an
+  autonomous agent may and may not touch that letting it into your infrastructure stops being an
+  act of faith. I keep arguing that trust is an architecture, not a feeling. Adoption obeys the same
+  law: you hand work to what you can inspect and contain.
 </p>
 
-<h2 class="serif art-h2">Where the server sits — again</h2>
+<h2 class="serif art-h2">A proving ground, not an end state</h2>
 
 <p>
-  Running all of this on a DGX Spark and a shelf of Mac Minis is obviously not the end state. It is
-  a proving ground: a way to validate the concept, and to evaluate a genuinely interesting question —
-  whether a developer's dev environment should sit close, on-premise, next to the MacBook rather than
-  in someone else's cloud, without a hard dependency on any single model provider. It has pros and
-  cons, and anyone who tells you it is obviously one or the other is selling something. At some point
-  the right move is to carry the pattern into a VPC of one's own. Still evaluating, still evolving —
-  but the direction is set.
-</p>
-
-<p>
-  I have written before that sovereignty begins with where the server sits. The Agent Fleet is that
-  thesis, expressed in hardware instead of argument. The machines are on the desk. The orchestration
-  runs through channels we own. The open source capacity belongs to whoever owns the electricity.
-  None of this is about secrecy — we build on public clouds and frontier models gladly. It is about
-  remaining an organisation that <em>could</em> keep thinking if any one of them became unavailable,
-  expensive, or merely inconvenient.
-</p>
-
-<h2 class="serif art-h2">Hybrid as a general principle</h2>
-
-<p>
-  What surprised me is how far the pattern generalises. Pick any layer of the agentic stack and ask:
-  what is the second option, and what keeps it warm? Humans and agents — the human layer is not a
-  fallback, it is the part that holds intent. Cloud and on-premise — each class of task runs where it
-  runs best, and neither is a single point of failure. Frontier and open source — premium where
-  quality pays for itself, open where volume and cost discipline matter. Coding harness and
-  orchestration harness — one owns the work, the other owns the flow. In every pairing, hybrid is
-  not the average of the two. It is a standing capability to choose, per task, on purpose.
+  To be clear about what the Minis and the Spark are: a start. A way to prove the concept, and to
+  test a question I find genuinely interesting — whether a developer's environment should sit
+  close, on-premise, next to the MacBook, with no hard dependency on a single model provider. It
+  has real pros and real cons; anyone claiming the answer is obvious is selling something. At some
+  point the pattern moves into a VPC of our own. Still evaluating, still evolving — but the
+  direction is set.
 </p>
 
 <p>
-  That is the connection to everything else I build. The Drift happens when convenience quietly
-  narrows your options until there is only one path left and it belongs to someone else. A hybrid
-  architecture is the Drift, reversed: a deliberate widening of options, maintained at some real
-  cost in complexity, precisely so that choosing remains possible. It is more work than going
-  all-in on one vendor. It is also, I have come to believe, the only stance that scales into an
-  agentic economy without turning you into a tenant of it.
+  And the direction rhymes with something I have argued before: sovereignty begins with where the
+  server sits. The Agent Fleet is that thesis built in hardware. The machines are on the desk. The
+  orchestration runs through channels we own. The open source capacity belongs to whoever pays the
+  electricity. None of this is secrecy — we use public clouds and frontier models gladly, wherever
+  they are the right tool. It is about staying an organisation that <em>could</em> keep thinking if
+  any one of them became unavailable, expensive, or merely inconvenient.
+</p>
+
+<h2 class="serif art-h2">The pattern underneath</h2>
+
+<p>
+  What surprised me is how far the pattern generalises. Take any layer of the agentic stack and ask
+  one question: what is the second option, and what keeps it warm? Humans and agents — the human
+  layer is not a fallback, it is the seat of intent. Cloud and on-premise — each class of task runs
+  where it runs best, and neither can starve the other. Frontier and open source — premium where
+  quality pays, open where volume and cost discipline matter. Coding harness and orchestration
+  harness — one owns the work, the other owns the flow.
 </p>
 
 <p>
-  Go hybrid — in every single aspect. Not because the options are equally good, but because the
-  ability to switch between them is the capability you can least afford to lose.
+  In every one of those pairings, hybrid is not the average of the two sides. It is a standing
+  capability to choose — per task, on purpose. That is also where this connects to everything else
+  I build. The Drift is what happens when convenience quietly narrows your options until one path
+  remains and it belongs to somebody else. Hybrid is the Drift in reverse: options deliberately
+  kept wide, at real cost in complexity, so that choosing remains ours. It is more work than going
+  all-in on one vendor. It is also, I have come to believe, the only stance that lets you scale
+  into an agentic economy without ending up a tenant in it.
+</p>
+
+<p>
+  So yes — we are going all-in on hybrid, in every single aspect of AI agents. Not because the two
+  sides of any pair are equally good. Because the ability to switch between them is the last
+  capability you can afford to lose.
 </p>
